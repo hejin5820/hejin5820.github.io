@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>天气查询</title>
+    <style>
+        #show{display:block;width:800px;height:200px;background:orange;border:1px solid #333;}
+    </style>
+</head>
+<body>
+<table border="2" align="center" cellspacing="20">
+    <tr align="center">
+        <td colspan="2" width="400" height="25">
+            <input type="text" name="place" placeholder="请输入要查询的省份" >
+            <select name="省" multiple="multiple">
+                <option value="省份">北京</option>
+                <option value="省份">天津</option>
+                <option value="省份">上海</option>
+            </select>
+        </td>
+        <td width="200"><button id="check weather">查询天气</button></td>
+    </tr>
+    <tr align="center" >
+        <td width="100" height="25">展示天气预报</td>
+    </tr>
+    <tr>
+        <td width="600"  colspan="3" height="300" bgcolor="#faebd7"></td>
+    </tr>
+    <tr></tr>
+    <tr>
+        <td width="600" colspan="3" height="400" bgcolor="#deb887"></td>
+    </tr>
+
+</table>
+<input type="text" id="city">
+ 	<button id="checkWeather">查询天气</button><br/>
+ 	<span id="show">展示天气预报</span>	 
+ 	<script>
+    var cw = document.getElementById("checkWeather");
+    cw.onclick = function() {
+        var http;
+        if(window.XMLHttpRequest) {
+            http = new XMLHttpRequest();
+        } else {
+            http = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        http.onreadystatechange = function(){
+            if(http.readyState == 4 && http.status == 200) {
+                // show.textContent = http.responseText;
+                var json = JSON.parse(http.responseText);
+                console.log(json);
+                show.textContent = "城市:" + json.data.city;
+                show.textContent += "===温馨提示:" + json.data.ganmao;
+                show.textContent += "===今天天气:" + json.data.forecast[0].type;
+                show.textContent += ",最低温度:" + json.data.forecast[0].low;
+                show.textContent += ",最高温度:" + json.data.forecast[0].high;
+                show.textContent += ",风力:" + json.data.forecast[0].fengli;
+                show.textContent += ",风向:" + json.data.forecast[0].fengxiang;
+            }
+        }
+
+        var cityName = city.value;
+
+        http.open("GET", "http://wthrcdn.etouch.cn/weather_mini?city=" + cityName,true);
+        http.send();
+    }
+</script>
+
+<form action="">
+    <input type="text" name="username" placeholder="Username" size="6" maxlength="6"><br>
+    <input type="text" name="nickname" value="Tom" readonly="readonly"><br>
+    <input type="password" name="password" placeholder="Password"><br>
+    <input type="radio" name="gender" value="male" checked="checked"> Male
+    <input type="radio" name="gender" value="female"> Female
+    <br>
+    <input type="checkbox" name="hobbies" value="Game" disabled="disabled"> Game
+    <input type="checkbox" name="hobbies" value="Movie"> Movie
+    <input type="checkbox" name="hobbies" value="Reading"> Reading
+    <br>
+    <select name="city" multiple="multiple">
+        <option value="Beijing">Beijing</option>
+        <option value="Shanghai" selected="selected">Shanghai</option>
+        <option value="Guangzhou">Guangzhou</option>
+    </select>
+    <br>
+    <input type="date" name="dob">
+    <br>
+    <input type="color" name="color">
+    <br>
+    <textarea name="introduce" cols="30" rows="3"></textarea>
+    <br>
+    <input type="submit" value="Sign up">
+    <!--<button>test</button>-->
+</form>
+</body>
+</html>
